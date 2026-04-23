@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Safety Governance White Paper | SHGS</title>
+    <style>
+        :root {
+            --bg-color: #FAF9F6;
+            --text-main: #2C2C2C;
+            --text-sub: #757575;
+            --accent: #A67C52;
+            --line-color: #EAE9E6;
+            --transition: all 0.7s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+
+        * { box-sizing: border-box; scroll-behavior: smooth; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+
+        body {
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: "Optima", "Georgia", "PingFang TC", "Heiti TC", sans-serif;
+            letter-spacing: 0.03em;
+            line-height: 1.8;
+        }
+
+        /* 導覽列 */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            background: rgba(250, 249, 246, 0.95);
+            backdrop-filter: blur(15px);
+            padding: 20px 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .nav-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        nav a { color: var(--text-sub); font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em; }
+        .nav-underline { position: absolute; bottom: -8px; height: 1.5px; background-color: var(--accent); transition: var(--transition); pointer-events: none; }
+
+        header { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; }
+        header h1 { font-size: 2.2rem; font-weight: 300; line-height: 1.6; margin: 0; }
+        header .info { margin-top: 40px; color: var(--text-sub); font-size: 0.9rem; letter-spacing: 0.15em; line-height: 2; }
+        header .report-tag { margin-bottom: 25px; color: var(--accent); letter-spacing: 0.5em; font-size: 0.75rem; }
+
+        .content-wrap { max-width: 850px; margin: 0 auto; padding: 0 40px; }
+        section { padding: 120px 0 50px 0; opacity: 0; transform: translateY(30px); transition: var(--transition); }
+        section.visible { opacity: 1; transform: translateY(0); }
+
+        .section-label { font-size: 0.65rem; color: var(--accent); letter-spacing: 0.2em; margin-bottom: 15px; display: block; }
+        h2 { font-size: 1.8rem; font-weight: 400; margin-bottom: 35px; }
+
+        .pyramid-container { margin: 60px 0; display: flex; flex-direction: column; align-items: center; }
+        .pyramid-layer { border: 1px solid var(--accent); margin: 5px 0; padding: 15px; text-align: center; font-size: 0.85rem; color: var(--accent); background: rgba(166, 124, 82, 0.03); }
+
+        blockquote { border-left: 2px solid var(--accent); margin: 40px 0; padding: 20px 35px; background: rgba(166, 124, 82, 0.02); font-size: 0.95rem; line-height: 1.8; color: #444; }
+        .external-link { color: var(--accent); font-size: 0.8rem; display: block; margin-top: 15px; font-weight: 500; }
+
+        p { line-height: 2.2; margin-bottom: 1.5rem; text-align: justify; color: #3d3d3d; }
+        table { width: 100%; border-collapse: collapse; margin: 40px 0; font-size: 0.9rem; }
+        th, td { padding: 18px; border-bottom: 1px solid var(--line-color); text-align: left; }
+        th { color: var(--accent); font-weight: 600; font-size: 0.75rem; }
+
+        .category-box { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px dotted var(--line-color); }
+        .category-title { font-weight: 600; color: var(--accent); margin-bottom: 15px; display: block; font-size: 1rem; }
+        .term { font-weight: 600; color: var(--text-main); }
+        .explanation { font-size: 0.9rem; color: var(--text-sub); display: block; margin-top: 5px; line-height: 1.6; }
+
+        .proposal-item { padding: 30px; border: 1px solid var(--line-color); margin-bottom: 25px; transition: var(--transition); }
+        .proposal-item:hover { border-color: var(--accent); transform: translateX(10px); }
+
+        /* 附錄照片網格：四照片 */
+        .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin: 40px 0; }
+        .gallery-item { background: #fff; padding: 12px; border: 1px solid var(--line-color); text-align: center; }
+        .gallery-item img { width: 100%; aspect-ratio: 4/3; object-fit: cover; filter: grayscale(10%); margin-bottom: 10px; }
+        .gallery-caption { font-size: 0.75rem; color: var(--text-sub); }
+
+        /* 文獻清單樣式 */
+        .reference-list { list-style: none; padding: 0; font-size: 0.8rem; line-height: 2.2; color: var(--text-sub); }
+        .reference-list li { margin-bottom: 12px; border-bottom: 1px solid rgba(0,0,0,0.02); padding-bottom: 5px; }
+        .ref-link { word-break: break-all; font-family: monospace; display: block; color: var(--accent); margin-top: 2px; }
+
+        footer { text-align: center; padding: 100px 0; font-size: 0.75rem; color: var(--text-sub); border-top: 1px solid var(--line-color); }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-container">
+        <a href="#roadmap" class="nav-link">ROADMAP | 地圖</a>
+        <a href="#background" class="nav-link">CONTEXT | 背景</a>
+        <a href="#comparison" class="nav-link">GOVERNANCE | 治理</a>
+        <a href="#principles" class="nav-link">PRINCIPLES | 準則</a>
+        <a href="#proposal" class="nav-link">PROPOSAL | 提案</a>
+        <a href="#reflection" class="nav-link">REFLECTION | 心得</a>
+        <a href="#appendix" class="nav-link">APPENDIX | 附錄</a>
+        <div class="nav-underline" id="underline"></div>
+    </div>
+</nav>
+
+<header>
+    <div class="report-tag">Research Report</div>
+    <h1>從全球共識到本土法治：<br>人工智慧安全準則研究以及台灣 AI 基本法建議方案</h1>
+    <div class="info">
+        聖心女中 自主學習成果報告<br>
+        S2B 馮韻如 310117
+    </div>
+</header>
+
+<div class="content-wrap">
+
+    <section id="roadmap">
+        <span class="section-label">Research Roadmap | 研究地圖</span>
+        <h2>探究架構分析</h2>
+        <p>本研究透過由下而上的歸納法，從國際共識出發，最終轉化為具備實踐意義的本土政策建議。</p>
+        <div class="pyramid-container">
+            <div class="pyramid-layer" style="width: 40%;">頂層：研究產出（台灣建議方案）</div>
+            <div class="pyramid-layer" style="width: 70%;">中層：自主統整產出（全球通用安全準則）</div>
+            <div class="pyramid-layer" style="width: 100%;">底層：基礎研究資料（全球治理範式與宣言背景）</div>
+        </div>
+    </section>
+    
+    <section id="background">
+        <span class="section-label">Context | 背景與動機</span>
+        <h2>全球治理的關鍵轉型期</h2>
+        <p>國際社會正經歷從「零散規則」向「全球框架」過渡的關鍵時期。台灣作為全球半導體供應鏈的核心，與 AI 技術發展有著深厚的連結。本研究旨在透過跨國觀察，為本土法治化尋找方向。</p>
+        <blockquote>
+            <p>「人工智慧系統已應用於日常生活的許多領域……我們意識到，現在正是採取行動、重申安全發展人工智慧的必要性……」</p>
+            <p>「……認識到必須重視人權保護、透明度、公平性、問責制、監管、安全、適當的人工監督等議題……我們重申解決這些問題的必要性和緊迫性。」</p>
+            <a href="https://www.gov.uk/government/publications/ai-safety-summit-2023-the-bletchley-declaration" target="_blank" class="external-link">《布萊奇利宣言》官方網站 | The Bletchley Declaration Official Website →</a>
+        </blockquote>
+    </section>
+
+    <section id="comparison">
+        <span class="section-label">Governance | 治理範式對比</span>
+        <h2>主權國家法律路徑研究</h2>
+        <table>
+            <tr><th>地區</th><th>核心邏輯</th><th>法律手段</th><th>導向</th></tr>
+            <tr><td><b>歐盟 (EU)</b></td><td>風險分級管理</td><td>《歐盟人工智慧法案》(AI Act)</td><td>權利/風險</td></tr>
+            <tr><td><b>美國 (US)</b></td><td>行政引導自律</td><td>2023/2024 AI 行政命令</td><td>創新/彈性</td></tr>
+            <tr><td><b>中國 (CN)</b></td><td>專項精準監管</td><td>《生成式 AI 服務管理辦法》</td><td>內容/安全</td></tr>
+        </table>
+    </section>
+
+    <section id="principles">
+        <span class="section-label">Principles | 統整產出</span>
+        <h2>全球 AI 安全通用準則</h2>
+        <p>本章節為研究者統整前述三大治理範式後，歸納出適用於全球框架的安全機制。</p>
+        <div class="category-box">
+            <span class="category-title">A. 准入與測試（預防機制）</span>
+            <p><span class="term">紅線測試 (Red Teaming)</span><span class="explanation">模擬對抗性測試，證明系統不會協助武器製造或網路攻擊。</span></p>
+            <p><span class="term">算力閾值備案</span><span class="explanation">監管消耗運算資源巨大之模型，確保技術發展在監管範圍。</span></p>
+        </div>
+        <div class="category-box">
+            <span class="category-title">B. 透明度與識別（識別機制）</span>
+            <p><span class="term">數位浮水印</span><span class="explanation">生成內容強制標識，保障公眾知情權與真偽識別。</span></p>
+            <p><span class="term">演算法解釋權</span><span class="explanation">法律應賦予當事人對 AI 決策（如面試、貸款）要求解釋之權利。</span></p>
+        </div>
+        <div class="category-box">
+            <span class="category-title">C. 責任歸屬與義務（機制保障）</span>
+            <p><span class="term">緊急煞車機制</span><span class="explanation">強制高度自主系統具備人工覆蓋與實體斷電介面。</span></p>
+            <p><span class="term">開發者持續監控義務</span><span class="explanation">產品上線後需追蹤風險，發現異常應主動通報政府。</span></p>
+        </div>
+    </section>
+
+    <section id="proposal">
+        <span class="section-label">Proposal | 建議方案</span>
+        <h2>台灣 AI 基本法配套修正建議</h2>
+        <div class="proposal-item"><h3>一、建立即時詐騙應對機制</h3><p>強制平台於檢舉後 2 小時內完成鑑定並下架 AI 偽造內容。</p></div>
+        <div class="proposal-item"><h3>二、落實文化正義與在地語料保護</h3><p>建立繁體中文數據集分潤機制，保護台灣本土創作者版權。</p></div>
+        <div class="proposal-item"><h3>三、法制化開發者安全通報義務</h3><p>明確高風險模型開發者定期提交報告與事故通報體系。</p></div>
+        <div class="proposal-item"><h3>四、細化 AI 風險分級管理</h3><p>針對醫療、司法等敏感領域，設立嚴格審查與人工介入機制。</p></div>
+    </section>
+
+    <section id="reflection">
+        <span class="section-label">Reflection | 探究心得</span>
+        <h2>專題研究體悟</h2>
+        <p>這份專案探究讓我深刻體會到法律並非冰冷的條文，而是一門極其嚴謹的平衡藝術。在研究過程中，我必須閱讀與整理大量來自全球的原始資料與文獻，這不僅開拓了我的國際視野，更讓我理解到：法律的制定並非隨機，而是根植於各國獨特的文化、國情、政治、經濟、目的與社會需求。</p>
+        <p>我學習到去觀察各國在監控與創新間的取捨，這種追問讓我能從全球範式中汲取經驗，嘗試勾勒出適合台灣本土的配套建議。我認為這場專題探究不僅是知識統整，更是關於數位公民責任的深度思辨。</p>
+    </section>
+
+    <section id="appendix">
+        <span class="section-label">Appendix | 研究附錄</span>
+        <h2>研究紀實與參考文獻</h2>
+        
+        <div class="gallery-grid">
+            <div class="gallery-item"><img src="p1.jpg" alt="紀實1"><p class="gallery-caption">資料蒐集與文獻摘錄</p></div>
+            <div class="gallery-item"><img src="p2.jpg" alt="紀實2"><p class="gallery-caption">各國法律範式對比整理</p></div>
+            <div class="gallery-item"><img src="p3.jpg" alt="紀實3"><p class="gallery-caption">建議方案邏輯推導筆記</p></div>
+            <div class="gallery-item"><img src="p4.jpg" alt="紀實4"><p class="gallery-caption">網頁架構與視覺設計校對</p></div>
+        </div>
+
+        <div class="proposal-item">
+            <h3>參考文獻與研究資源 (References)</h3>
+            <ul class="reference-list">
+                <li><b>OECD AI Policy Observatory</b> - 全球 AI 政策分析平台<span class="ref-link">https://oecd.ai/en/</span></li>
+                <li><b>Congress.gov (United States Legislation)</b> - 美國國會立法追蹤系統<span class="ref-link">https://www.congress.gov/search?q=%7B%22source%22%3A%22legislation%22%2C%22congress%22%3A119%7D</span></li>
+                <li><b>The Artificial Intelligence Act (EU Official)</b> - 歐盟人工智慧法案專網<span class="ref-link">https://artificialintelligenceact.eu/</span></li>
+                <li><b>United Nations AI Governance Dialogue</b> - 聯合國全球 AI 治理對話平台<span class="ref-link">https://www.un.org/global-dialogue-ai-governance/en</span></li>
+                <li><b>法務部全國法規資料庫 (Laws & Regulations Database of Taiwan)</b><span class="ref-link">https://law.moj.gov.tw/</span></li>
+                <li><b>立法院法律系統 (Legislative Yuan Law System)</b><span class="ref-link">https://lis.ly.gov.tw/lglawc/lawsingle?0^26180C91C0604446180C81796036180C91C0604446180C817960386664196D966D964969699696099609900996099009</span></li>
+            </ul>
+        </div>
+    </section>
+
+</div>
+
+<footer><p>© 2026 聖心女中 自主學習成果發表 | S2B 馮韻如 310117</p></footer>
+
+<script>
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const underline = document.getElementById('underline');
+    function updateUnderline(element) { underline.style.width = `${element.offsetWidth}px`; underline.style.left = `${element.offsetLeft}px`; }
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                const id = entry.target.getAttribute('id');
+                const activeLink = document.querySelector(`.nav-link[href="#${id}"]`);
+                if (activeLink) { navLinks.forEach(l => l.style.color = 'var(--text-sub)'); activeLink.style.color = 'var(--text-main)'; updateUnderline(activeLink); }
+            }
+        });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    sections.forEach(section => observer.observe(section));
+</script>
+
+</body>
+</html>
